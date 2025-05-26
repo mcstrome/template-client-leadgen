@@ -30,7 +30,8 @@ const handleChange = (e: JSX.TargetedEvent<HTMLInputElement | HTMLTextAreaElemen
   setFormData(prev => ({
     ...prev,
     [name]: value,
-  }));};
+  }));
+};
 
 const handleSubmit = async (e: Event) => {
   e.preventDefault();
@@ -81,7 +82,7 @@ const handleSubmit = async (e: Event) => {
     </div>
   ) : null}
 
-  <form onSubmit={handleSubmit} class="space-y-6">
+  <form id="leadForm" onSubmit={handleSubmit} class="space-y-6">
     <div>
       <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
         Name <span class="text-red-500">*</span>
@@ -156,6 +157,56 @@ const handleSubmit = async (e: Event) => {
     </div>
   </form>
 </div>
+
+<script>
+  import { useState } from 'preact/hooks';
+
+  const form = document.getElementById('leadForm');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          source: window.location.href,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          success: true,
+          message: 'Thank you for your submission! We will get back to you soon.',
+        });
+        form.reset();
+      } else {
+        throw new Error(result.message || 'Failed to submit form');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitStatus({
+        success: false,
+        message: 'There was an error submitting your form. Please try again later.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  });
+</script>
 
 <style>
   /* Add any custom styles here */

@@ -37,7 +37,7 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.8.3)
       '@astrojs/preact':
-        specifier: ^3.1.0
+        specifier: ^3.5.4
         version: 3.5.4(@babel/core@7.27.1)(@types/node@20.17.50)(preact@10.26.6)
       '@tsconfig/strictest':
         specifier: ^2.0.2
@@ -55,7 +55,7 @@ importers:
         specifier: ^1.17.2
         version: 1.17.2(@types/node@20.17.50)
       preact:
-        specifier: ^10.19.0
+        specifier: ^10.26.6
         version: 10.26.6
       supertest:
         specifier: ^6.3.3
