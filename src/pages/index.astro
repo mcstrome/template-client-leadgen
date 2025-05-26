@@ -12,7 +12,7 @@ const siteConfig = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={siteConfig.description} />
-    <title>{siteConfig.title} | Lead Generation Template</title>
+    <title>{siteConfig.title} | {import.meta.env.SITE_NAME || 'Lead Generation'}</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -24,25 +24,17 @@ const siteConfig = {
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Link to external Tailwind CSS file -->
+    <link rel="stylesheet" href="/tailwind.css" />
     
-    <!-- Include Tailwind CSS -->
-    <script>
-      // Load Tailwind CSS from CDN for demo purposes
-      // In production, you might want to use a build process
-      if (typeof window !== 'undefined') {
-        const link = document.createElement('link');
-        link.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-      }
-    </script>
   </head>
   
   <body class="bg-gray-50 min-h-screen flex flex-col">
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-gray-900">
-          Lead Generation Template
+          {import.meta.env.SITE_NAME || 'Lead Generation'}
         </h1>
       </div>
     </header>
@@ -201,11 +193,9 @@ const siteConfig = {
 </script>
 */}
 
-{/*
 <style>
   /* Add any custom styles here */
 </style>
-*/}
 
           </div>
         </div>
@@ -215,9 +205,10 @@ const siteConfig = {
     <footer class="bg-white border-t border-gray-200 mt-12">
       <div class="max-w-7xl mx-auto py-6 px-4 overflow-hidden sm:px-6 lg:px-8">
         <p class="text-center text-base text-gray-500">
-          &copy; {new Date().getFullYear()} Lead Generation Template. All rights reserved.
+          &copy; {new Date().getFullYear()} {import.meta.env.SITE_NAME || 'Lead Generation'}. All rights reserved.
         </p>
       </div>
     </footer>
+
   </body>
 </html>
