@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
-import preact from '@astrojs/preact';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,9 +11,7 @@ export default defineConfig({
   },
   site: process.env.SITE || 'https://example.com',
   integrations: [
-    preact({
-      compat: true,
-    }),
+    // ... existing code ...
   ],
   vite: {
     define: {
