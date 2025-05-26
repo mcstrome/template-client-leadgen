@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "target": "ES2020",
+    "jsx": "preserve",
+    "jsxImportSource": "preact",
+    "allowJs": true,
+    "types": ["vite/client"],
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    ".astro/types.d.ts"
+  ],
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "./tsconfig.node.json" }
+  ]
+}

@@ -1,0 +1,12 @@
+name = "template-client-leadgen"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# KV Namespace configuration
+kv_namespaces = [
+  { binding = "RATE_LIMIT_KV", id = "4fa7a4ed010d4de6beeba2bd574d8b0d" }
+]
+
+# Environment variables
+[vars]
+ENVIRONMENT = "development" 
