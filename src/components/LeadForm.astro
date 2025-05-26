@@ -82,7 +82,7 @@ const handleSubmit = async (e: Event) => {
     </div>
   ) : null}
 
-  <form id="leadForm" onSubmit={handleSubmit} class="space-y-6">
+  <form id="leadForm" class="space-y-6">
     <div>
       <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
         Name <span class="text-red-500">*</span>
@@ -91,8 +91,6 @@ const handleSubmit = async (e: Event) => {
         type="text"
         id="name"
         name="name"
-        value={formData.name}
-        onInput={handleChange}
         required
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
@@ -106,8 +104,6 @@ const handleSubmit = async (e: Event) => {
         type="email"
         id="email"
         name="email"
-        value={formData.email}
-        onInput={handleChange}
         required
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
@@ -121,8 +117,6 @@ const handleSubmit = async (e: Event) => {
         type="tel"
         id="phone"
         name="phone"
-        value={formData.phone}
-        onInput={handleChange}
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
     </div>
@@ -135,8 +129,6 @@ const handleSubmit = async (e: Event) => {
         id="message"
         name="message"
         rows={4}
-        value={formData.message}
-        onInput={handleChange}
         required
         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       ></textarea>
@@ -145,30 +137,36 @@ const handleSubmit = async (e: Event) => {
     <div class="pt-2">
       <button
         type="submit"
-        disabled={isSubmitting}
-        class={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-          isSubmitting
-            ? 'bg-blue-400 cursor-not-allowed'
-            : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
-        }`}
+        id="submitButton"
+        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
-        {isSubmitting ? 'Submitting...' : 'Submit'}
+        Submit
       </button>
     </div>
+    <div id="submitStatusMessage" class="hidden p-4 mt-4 rounded"></div>
   </form>
 </div>
 
 <script>
-  import { useState } from 'preact/hooks';
-
   const form = document.getElementById('leadForm');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const submitButton = document.getElementById('submitButton');
+  const statusMessageDiv = document.getElementById('submitStatusMessage');
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+
+    // Disable button and show loading indicator
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting...';
+      submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      submitButton.classList.add('bg-blue-400', 'cursor-not-allowed');
+    }
+    if (statusMessageDiv) {
+      statusMessageDiv.textContent = '';
+      statusMessageDiv.classList.add('hidden');
+      statusMessageDiv.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+    }
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -187,23 +185,34 @@ const handleSubmit = async (e: Event) => {
 
       const result = await response.json();
 
-      if (response.ok) {
-        setSubmitStatus({
-          success: true,
-          message: 'Thank you for your submission! We will get back to you soon.',
-        });
-        form.reset();
-      } else {
-        throw new Error(result.message || 'Failed to submit form');
+      if (statusMessageDiv) {
+        statusMessageDiv.classList.remove('hidden');
+        if (response.ok) {
+          statusMessageDiv.textContent = 'Thank you for your submission! We will get back to you soon.';
+          statusMessageDiv.classList.add('bg-green-100', 'text-green-800');
+          form.reset();
+        } else {
+          statusMessageDiv.textContent = result.message || 'There was an error submitting your form. Please try again later.';
+          statusMessageDiv.classList.add('bg-red-100', 'text-red-800');
+          console.error('Form submission error:', result);
+        }
       }
+
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmitStatus({
-        success: false,
-        message: 'There was an error submitting your form. Please try again later.',
-      });
+      if (statusMessageDiv) {
+        statusMessageDiv.classList.remove('hidden');
+        statusMessageDiv.textContent = 'There was an error submitting your form. Please try again later.';
+        statusMessageDiv.classList.add('bg-red-100', 'text-red-800');
+      }
     } finally {
-      setIsSubmitting(false);
+      // Re-enable button
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit';
+        submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        submitButton.classList.remove('bg-blue-400', 'cursor-not-allowed');
+      }
     }
   });
 </script>
